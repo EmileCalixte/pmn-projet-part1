@@ -1,3 +1,5 @@
 .env
 .idea
 .vagrant
+ansible_deploy_nopass_rsa
+ansible_deploy_nopass_rsa.pub
