@@ -1,0 +1,27 @@
+
+# Liste des utilisateurs par lequel ansible se connectera aux machines.
+
+control ansible_user=root
+s0.infra ansible_user=root
+s1.infra ansible_user=root
+s2.infra ansible_user=root
+s3.infra ansible_user=root
+s4.infra ansible_user=root
+
+# Roles
+
+[group_control]
+control
+
+[group_app_proxy]
+s0.infra
+
+[group_app_hosting]
+s1.infra
+s2.infra
+
+[group_db_hosting]
+s3.infra
+
+[group_nfs_hosting]
+s4.infra
