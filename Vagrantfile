@@ -3,37 +3,41 @@
 # frozen_string_literal: true
 
 require 'yaml'
+#TODO voir si ça sert
 require 'erb'
 
 ENV['VAGRANT_DEFAULT_PROVIDER'] = 'virtualbox'
 ENV['VAGRANT_NO_PARALLEL'] = 'yes'
 
 # Define settings for all machines
+# Virer les ports pour MariaDB et voir si ça marche
 SERVERS_DATA = YAML.safe_load(
   <<-YAML
   ---
-  elastic-01:
+  control:
     ipaddr: 192.168.50.10
-    memory: 2500
-    ports:
-      - { guest: 9200, host: 9200 }
-  elastic-02:
+    memory: 512
+    ports: []
+  s0.infra:
     ipaddr: 192.168.50.20
-    memory: 2500
+    memory: 512
     ports:
-      - { guest: 9200, host: 9201 }
-  kibana:
+      - { guest: 80, host: 80 }
+  s1.infra:
     ipaddr: 192.168.50.30
-    memory: 1500
-    ports:
-      - { guest: 5601, host: 5601 }
-  logstash:
+    memory: 512
+    ports: []
+  s2.infra:
     ipaddr: 192.168.50.40
-    memory: 1500
+    memory: 512
+    ports: []
+  s3.infra:
+    ipaddr: 192.168.50.50
+    memory: 512
     ports:
-      - { guest: 9600, host: 9600 }
-  app:
-    ipaddr: 192.168.50.250
+      - { guest: 3306, host: 3306 }
+  s4.infra:
+    ipaddr: 192.168.50.60
     memory: 512
     ports:
       - { guest: 80, host: 8080 }
@@ -53,10 +57,10 @@ LAN_SUFFIX = File.readlines('.env')
 HOSTS_FILE = ERB.new(
   <<-HOSTS_TEMPLATE
   ## BEGIN PROVISION
-  <% hosts = SERVERS_DATA.map{ |k,v| OpenStruct.new(name: k, ipaddr: v['ipaddr']) } -%>
-  <% dotsuffix = (LAN_SUFFIX.nil? || LAN_SUFFIX.empty?) ? '' : ('.' + LAN_SUFFIX) -%>
+  <% hosts = SERVERS_DATA.map{ |key,value| OpenStruct.new(name: key, ipaddr: value['ipaddr']) } -%>
+  <% lansuffix = (LAN_SUFFIX.nil? || LAN_SUFFIX.empty?) ? '' : ('.' + LAN_SUFFIX) -%>
   <% for item in hosts -%>
-  <%= item.ipaddr %>\t<%= item.name %> <%= item.name %><%= dotsuffix %>
+  <%= item.ipaddr %>\t<%= item.name %> <%= item.name %><%= lansuffix %>
   <% end -%>
   ## END PROVISION
   HOSTS_TEMPLATE
