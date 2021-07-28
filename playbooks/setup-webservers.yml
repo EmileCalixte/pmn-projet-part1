@@ -1,0 +1,16 @@
+---
+## Play
+- hosts: group_app_hosting
+
+  tasks:
+    - name: Install apache2 & PHP7
+      apt:
+        name:
+          - apache2
+          - php7.3
+
+    # TODO
+    # Mount NFS in /mnt/nfs
+    # Create virtualhost (port 80)
+      
+        

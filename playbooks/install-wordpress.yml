@@ -1,0 +1,23 @@
+---
+## Play
+- hosts: group_nfs_hosting
+
+  tasks:
+    - name: Check if wordpress is already installed
+      stat:
+        path: /home/data/wordpress
+      register: wordpress_directory
+
+    - name: Delete wordpress if it is not a directory
+      file:
+        path: /home/data/wordpress
+        state: absent
+      when: wordpress_directory.stat.exists and not wordpress_directory.stat.isdir
+    
+    - name: Download and extract wordpress
+      block:
+        - name: Download wordpress
+          get_url:
+            url: https://wordpress.org/latest.zip
+            dest: /usr/src/wordpress-latest.zip
+      when: not wordpress_directory.stat.exists or not wordpress_directory.stat.isdir
