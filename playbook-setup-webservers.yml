@@ -8,9 +8,14 @@
         name:
           - apache2
           - php7.3
+#    - name : Mount nfs server's folder on webservers
+#      mount:
+#        path: /mnt/nfs
+#        src: s4.infra:/home/data
+#        state: mounted
+#        fstype: ext4
 
     # TODO
     # Mount NFS in /mnt/nfs
     # Create virtualhost (port 80)
       
-        
