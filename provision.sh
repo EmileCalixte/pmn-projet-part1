@@ -38,7 +38,8 @@ EOF
 
 # J'installe des outils pré-requis
 apt-get install -y \
-  unzip
+  unzip \
+  nfs-kernel-server
 
 if [ "$HOSTNAME" = "control" ]; then
 	# J'installe ansible dessus
@@ -75,4 +76,12 @@ else
   cd .ssh
   cp /vagrant/ansible_deploy_nopass_rsa.pub .
   cat ansible_deploy_nopass_rsa.pub >> authorized_keys
+fi
+
+if [ "$HOSTNAME" = "s4" ]; then
+  cat << EOF >> /etc/exports
+/home/data s1.infra
+/home/data s2.infra
+EOF
+  exportfs -a
 fi
