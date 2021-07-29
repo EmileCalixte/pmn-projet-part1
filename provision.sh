@@ -36,6 +36,10 @@ Host s4.infra
 EOF
 )
 
+# J'installe des outils pré-requis
+apt-get install -y \
+  unzip
+
 if [ "$HOSTNAME" = "control" ]; then
 	# J'installe ansible dessus
   apt-get install -y \
@@ -51,7 +55,7 @@ if [ "$HOSTNAME" = "control" ]; then
 
   # Je configure SSH pour l'utilisateur root
   cd /root
-  mkdir .ssh
+  mkdir -p .ssh
   cd .ssh
   cp /vagrant/ansible_deploy_nopass_rsa .
   chmod 600 ansible_deploy_nopass_rsa
@@ -67,7 +71,7 @@ else
 
   # Je configure SSH pour l'utilisateur root
   cd /root
-  mkdir .ssh
+  mkdir -p .ssh
   cd .ssh
   cp /vagrant/ansible_deploy_nopass_rsa.pub .
   cat ansible_deploy_nopass_rsa.pub >> authorized_keys

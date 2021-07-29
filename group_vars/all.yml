@@ -1,0 +1,7 @@
+sites:
+  - url: devops.com
+    www_directory: devops_com
+  - url: devsec.com
+    www_directory: devsec_com
+  - url: devsecops.com
+    www_directory: devsecops_com

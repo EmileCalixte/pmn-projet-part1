@@ -1,0 +1,30 @@
+---
+## Play
+- hosts: group_nfs_hosting
+
+  tasks:
+    - name: Ensure that /home/data directory is present
+      file:
+        path: /home/data
+        state: directory
+    - name: Download wordpress
+      get_url:
+        url: https://wordpress.org/latest.zip
+        dest: /usr/src/wordpress-latest.zip
+      changed_when: False
+    - name: Unzip wordpress
+      unarchive:
+        remote_src: yes # The archive is already on the remote machine, not on the control machine
+        src: /usr/src/wordpress-latest.zip
+        dest: /usr/src
+    - name: Copy wordpress to website directories
+      synchronize:
+        src: /usr/src/wordpress
+        dest: "/home/data/{{item.www_directory}}"
+      delegate_to: s4.infra
+      with_items: "{{ sites }}"
+    - name: Delete downloaded archive
+      file:
+        path: /usr/src/wordpress-latest.zip
+        state: absent
+      changed_when: False
