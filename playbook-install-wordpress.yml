@@ -3,10 +3,6 @@
 - hosts: group_nfs_hosting
 
   tasks:
-    - name: Ensure that /home/data directory is present
-      file:
-        path: /home/data
-        state: directory
     - name: Download wordpress
       get_url:
         url: https://wordpress.org/latest.zip
