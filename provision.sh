@@ -36,10 +36,11 @@ Host s4.infra
 EOF
 )
 
+apt-get --allow-releaseinfo-change update
+
 # J'installe des outils pré-requis
 apt-get install -y \
-  unzip \
-  nfs-kernel-server
+  unzip
 
 if [ "$HOSTNAME" = "control" ]; then
 	# J'installe ansible dessus
@@ -76,12 +77,4 @@ else
   cd .ssh
   cp /vagrant/ansible_deploy_nopass_rsa.pub .
   cat ansible_deploy_nopass_rsa.pub >> authorized_keys
-fi
-
-if [ "$HOSTNAME" = "s4" ]; then
-  cat << EOF >> /etc/exports
-/home/data s1.infra
-/home/data s2.infra
-EOF
-  exportfs -a
 fi
