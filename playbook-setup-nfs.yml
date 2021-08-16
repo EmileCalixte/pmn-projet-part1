@@ -1,0 +1,26 @@
+---
+## Play
+- hosts: group_nfs_hosting
+
+  tasks:
+    - name: Install NFS Server
+      apt:
+        name: nfs-kernel-server
+    - name: Ensure that /home/data directory is present
+      file:
+        path: /home/data
+        state: directory
+    - name: Configure NFS Server
+      block:
+        - name: Configure exports for s1.infra
+          lineinfile:
+            path: /etc/exports
+            line: /home/data s1.infra
+            state: present
+        - name: Configure exports for s2.infra
+          lineinfile:
+            path: /etc/exports
+            line: /home/data s2.infra
+            state: present
+        - name: Apply exports
+          command: exportfs -a
