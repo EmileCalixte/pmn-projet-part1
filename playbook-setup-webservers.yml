@@ -3,6 +3,9 @@
 - hosts: group_app_hosting
 
   tasks:
+    - name: Install NFS Server
+      apt:
+        name: nfs-kernel-server
     - name: Install apache2 & PHP7
       apt:
         name:
