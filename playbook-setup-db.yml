@@ -1,0 +1,8 @@
+---
+## Play
+- hosts: group_db_hosting
+
+  tasks:
+    - name: Install Maria DB
+      apt:
+        name: mariadb-server
