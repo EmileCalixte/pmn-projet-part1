@@ -1,0 +1,23 @@
+---
+## Play
+- hosts: group_app_proxy
+
+  tasks:
+    - name: Install HAProxy
+      apt:
+        name: haproxy
+    
+    - name: Copy HAProxy config
+      copy:
+        src: files/haproxy.cfg
+        dest: /etc/haproxy/haproxy.cfg
+
+    - name: Configure hosts
+      lineinfile:
+        path: /etc/hosts
+        line: "127.0.0.1 {{item.url}}"
+      with_items: "{{ sites }}"
+      
+    - name: Enable HAProxy
+      shell: 
+        cmd: systemctl enable haproxy && systemctl start haproxy
