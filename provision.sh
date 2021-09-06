@@ -45,7 +45,7 @@ apt-get install -y \
 if [ "$HOSTNAME" = "control" ]; then
   # Je mets à jour les sources pour pouvoir installer une version plus récente d'ansible
   echo "deb http://ppa.launchpad.net/ansible/ansible/ubuntu bionic main" | tee -a /etc/apt/sources.list
-  apt-get install gnupg2
+  apt-get install -y gnupg2
   sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 93C4A3FD7BB9C367
   apt-get update
 
@@ -94,6 +94,6 @@ if [ "$HOSTNAME" = "s3.infra" ]; then
 
 	python2.7 -m pip install -U pip
 	python2.7 -m pip install -U setuptools
-	apt-get install python-dev libpq-dev
+	apt-get install -y python-dev libpq-dev
 	pip install pymysql
 fi
