@@ -43,9 +43,18 @@ apt-get install -y \
   unzip
 
 if [ "$HOSTNAME" = "control" ]; then
+  # Je mets à jour les sources pour pouvoir installer une version plus récente d'ansible
+  echo "deb http://ppa.launchpad.net/ansible/ansible/ubuntu bionic main" | tee -a /etc/apt/sources.list
+  apt-get install gnupg2
+  sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 93C4A3FD7BB9C367
+  apt-get update
+
 	# J'installe ansible dessus
   apt-get install -y \
 		ansible
+
+	# J'installe la collection ansible mysql
+	ansible-galaxy collection install community.mysql
 
   # Je configure SSH pour l'utilisateur vagrant
   cd /home/vagrant/.ssh
@@ -77,4 +86,14 @@ else
   cd .ssh
   cp /vagrant/ansible_deploy_nopass_rsa.pub .
   cat ansible_deploy_nopass_rsa.pub >> authorized_keys
+fi
+
+if [ "$HOSTNAME" = "s3.infra" ]; then
+	apt-get install -y \
+		python-pip
+
+	python2.7 -m pip install -U pip
+	python2.7 -m pip install -U setuptools
+	apt-get install python-dev libpq-dev
+	pip install pymysql
 fi

@@ -1,8 +1,26 @@
 ---
 ## Play
 - hosts: group_db_hosting
+  collections:
+    - community.mysql
 
   tasks:
     - name: Install Maria DB
       apt:
         name: mariadb-server
+
+    - name: Create Mysql user
+      mysql_user:
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+        name: wordpress
+        password: SuperSecr3t
+        priv: '*.*:ALL'
+        state: present
+
+    - name: Create databases
+      mysql_db:
+        name: "{{ item.www_directory }}"
+        state: present
+        login_user: wordpress
+        login_password: SuperSecr3t
+      with_items: "{{ sites }}"
