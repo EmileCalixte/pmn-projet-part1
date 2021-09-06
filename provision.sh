@@ -88,7 +88,7 @@ else
   cat ansible_deploy_nopass_rsa.pub >> authorized_keys
 fi
 
-if [ "$HOSTNAME" = "s3.infra" ]; then
+if [ "$HOSTNAME" = "s3" ]; then
 	apt-get install -y \
 		python-pip
 
