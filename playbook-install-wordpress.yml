@@ -24,3 +24,31 @@
         path: /usr/src/wordpress-latest.zip
         state: absent
       changed_when: False
+
+
+- hosts: group_app_hosting
+
+  tasks:
+    - name: Copy virtualhosts
+      copy:
+        src: files/{{ item.conf_file }}
+        dest: /etc/apache2/sites-available/{{ item.conf_file }}
+      with_items: "{{ sites }}"
+
+    - name: Enable devops.com
+      command: a2ensite devops_com
+    
+    - name: Enable devsec.com
+      command: a2ensite devsec_com
+    
+    - name: Enable devsecops.com
+      command: a2ensite devsecops_com
+
+    - name: Reload apache
+      command: systemctl reload apache2
+
+    - name: Configure hosts
+      lineinfile:
+        path: /etc/hosts
+        line: "127.0.0.1 {{item.url}}"
+      with_items: "{{ sites }}"

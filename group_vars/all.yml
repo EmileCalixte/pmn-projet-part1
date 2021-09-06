@@ -1,7 +1,10 @@
 sites:
   - url: devops.com
     www_directory: devops_com
+    conf_file: devops_com.conf
   - url: devsec.com
     www_directory: devsec_com
+    conf_file: devsec_com.conf
   - url: devsecops.com
     www_directory: devsecops_com
+    conf_file: devsecops_com.conf
