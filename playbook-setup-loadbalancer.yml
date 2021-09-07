@@ -19,5 +19,9 @@
       with_items: "{{ sites }}"
       
     - name: Enable HAProxy
-      shell: 
-        cmd: systemctl enable haproxy && systemctl start haproxy
+      command:
+        cmd: systemctl enable haproxy
+
+    - name: Start HAProxy
+      command:
+        cmd: systemctl restart haproxy
