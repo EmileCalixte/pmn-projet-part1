@@ -18,4 +18,5 @@
         src: s4.infra:/home/data
         state: mounted
         fstype: nfs
+        opts: rw,user,exec
       

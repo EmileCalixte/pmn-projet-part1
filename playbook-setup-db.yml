@@ -1,26 +1,47 @@
 ---
 ## Play
 - hosts: group_db_hosting
-  #collections:
-   # - community.mysql
+  collections:
+    - community.mysql
 
   tasks:
     - name: Install Maria DB
       apt:
         name: mariadb-server
 
-#    - name: Create Mysql user
-#      mysql_user:
-#        login_unix_socket: /var/run/mysqld/mysqld.sock
-#        name: wordpress
-#        password: SuperSecr3t
-#        priv: '*.*:ALL'
-#        state: present
-#
-#    - name: Create databases
-#      mysql_db:
-#        name: "{{ item.www_directory }}"
-#        state: present
-#        login_user: wordpress
-#        login_password: SuperSecr3t
-#      with_items: "{{ sites }}"
+    - name: Create Mysql user
+      mysql_user:
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+        name: wordpress
+        password: SuperSecr3t
+        priv: '*.*:ALL'
+        state: present
+
+    - name: Create databases
+      mysql_db:
+        name: "{{ item.www_directory }}"
+        state: present
+        login_user: wordpress
+        login_password: SuperSecr3t
+      with_items: "{{ sites }}"
+
+    - name: Allow remote connection
+      lineinfile:
+        path: /etc/mysql/mariadb.conf.d/50-server.cnf
+        regexp: "^bind-address"
+        state: absent
+
+    - name: Allow wordpress user to connect remotely
+      shell:
+        cmd: mariadb -u root -Bse "GRANT ALL ON {{ item[0].www_directory }}.* to 'wordpress'@'{{ item[1] }}' IDENTIFIED BY 'SuperSecr3t';"
+      with_nested:
+        - "{{ sites }}"
+        - ['s1.infra', 's2.infra']
+
+    - name: Flush privileges
+      shell:
+        cmd: mariadb -u root -Bse "FLUSH PRIVILEGES;"
+
+    - name: Restart mariadb
+      command:
+        cmd: systemctl restart mariadb
