@@ -73,6 +73,9 @@ if [ "$HOSTNAME" = "control" ]; then
   touch config
   echo "$SSH_CONFIG" > config
 
+  # J'autorise les playbooks à s'executer sans avoir à manuellement vérifier la connexion SSH
+  echo "ANSIBLE_HOST_KEY_CHECKING=False" >> /etc/environment
+
 else
   # Je configure SSH pour l'utilisateur vagrant
   cd /home/vagrant/.ssh

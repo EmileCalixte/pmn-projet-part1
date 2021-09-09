@@ -24,6 +24,12 @@
         path: /usr/src/wordpress-latest.zip
         state: absent
       changed_when: False
+    - name: Set Permissions for mounted folder
+      file:
+        path: /home/data
+        state: directory
+        mode: '0777'
+        recurse: yes
 
 
 - hosts: group_app_hosting

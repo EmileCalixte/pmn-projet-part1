@@ -15,12 +15,7 @@
         - name: Configure exports for s1.infra
           lineinfile:
             path: /etc/exports
-            line: /home/data s1.infra
-            state: present
-        - name: Configure exports for s2.infra
-          lineinfile:
-            path: /etc/exports
-            line: /home/data s2.infra
+            line: /home/data s1.infra(rw) s2.infra(rw)
             state: present
         - name: Apply exports
           command: exportfs -a
