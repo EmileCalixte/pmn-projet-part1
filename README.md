@@ -23,13 +23,13 @@ Avec :
 
 Se connecter à la machine control pour exécuter les playbooks, avec la commande `vagrant ssh control`
 
-Exécuter les commandes suivantes pour exécuter les playbooks Ansible :
+Exécuter les commandes suivantes pour exécuter les playbooks Ansible (le mot de passe du vault est `vault_secret`) :
 
 ```bash
 cd /vagrant
 ansible-playbook -i inventories/default playbook-setup-nfs.yml
 ansible-playbook -i inventories/default playbook-setup-webservers.yml
-ansible-playbook -i inventories/default playbook-setup-db.yml
+ansible-playbook -i inventories/default playbook-setup-db.yml --ask-vault-pass
 ansible-playbook -i inventories/default playbook-install-wordpress.yml
 ansible-playbook -i inventories/default playbook-setup-loadbalancer.yml
 ```
