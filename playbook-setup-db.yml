@@ -13,7 +13,7 @@
       mysql_user:
         login_unix_socket: /var/run/mysqld/mysqld.sock
         name: wordpress
-        password: SuperSecr3t
+        password: "{{ db_password }}"
         priv: '*.*:ALL'
         state: present
 
@@ -22,7 +22,7 @@
         name: "{{ item.www_directory }}"
         state: present
         login_user: wordpress
-        login_password: SuperSecr3t
+        login_password: "{{ db_password }}"
       with_items: "{{ sites }}"
 
     - name: Allow remote connection
@@ -33,7 +33,7 @@
 
     - name: Allow wordpress user to connect remotely
       shell:
-        cmd: mariadb -u root -Bse "GRANT ALL ON {{ item[0].www_directory }}.* to 'wordpress'@'{{ item[1] }}' IDENTIFIED BY 'SuperSecr3t';"
+        cmd: mariadb -u root -Bse "GRANT ALL ON {{ item[0].www_directory }}.* to 'wordpress'@'{{ item[1] }}' IDENTIFIED BY '{{ db_password }}';"
       with_nested:
         - "{{ sites }}"
         - ['s1.infra', 's2.infra']
